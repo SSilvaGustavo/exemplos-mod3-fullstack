@@ -50,6 +50,10 @@ app.get("/games", (req, res) => {
   res.send(`<h1>${randomGames(randomMinMax(0, games.length + 1))}</h1>`);
 });
 
+app.get("/gameslist", (req, res) => {
+  res.send(games);
+});
+
 games.forEach(function (item, indice) {
   console.log(item, indice);
 });
@@ -65,16 +69,15 @@ app.get("/games/:id", (req, res) => {
   const id = req.params.id - 1;
   const game = games[id];
   if (id > games.length - 1 || id < 1) {
-    res.send("ID invalido\nTente novamente.");
+    res.send("ID invalido, tente novamente!");
   } else {
     res.send(game);
   }
 });
 
-app.post("/games", (req, res) => {
-  const game = req.body.filme;
+app.post("/gamesadd", (req, res) => {
+  const game = req.body.game;
   const id = games.length + 1;
-
   games.push(game);
 
   res.send(`Game adicionado com sucesso!
@@ -82,28 +85,37 @@ app.post("/games", (req, res) => {
   ID do Game: ${id}`);
 });
 
-app.put("/games/:id", (req, res) => {
-  const gameAnterior = games[id];
+app.put("/gamesup/:id", (req, res) => {
   const game = req.body.game;
   const id = req.params.id - 1;
+  if (id > games.length || id < 0) {
+    res.send("ID não encontrado, tente novamente!");
+  } else if (games[id] == undefined) {
+    res.send("ID não encontrado, tente novamente!");
+  } else {
+    const gameAnterior = games[id];
+    games[id] = game;
 
-  games[id] = game;
-
-  res.send(`Game alterado com sucesso!
+    res.send(`Game alterado com sucesso!
   Game Anterior: ${gameAnterior}
   Game Atual: ${game}`);
+  }
 });
 
-app.delete("/games/:id", (req, res) => {
+app.delete("/gamesdel/:id", (req, res) => {
   const id = req.params.id - 1;
   const gameDeletado = games[id];
 
   if (id > games.length || id < 0) {
     res.send("ID não encontrado, tente novamente!");
-  }
-  delete games[id];
-  res.send(`Game deletado com sucesso!
+  } else if (games[id] == undefined) {
+    res.send("ID não encontrado, tente novamente");
+  } else {
+    gameDel = games.splice(id, 1);
+
+    res.send(`Game deletado com sucesso!
   Game: ${gameDeletado}`);
+  }
 });
 
 app.listen(port, () => {
