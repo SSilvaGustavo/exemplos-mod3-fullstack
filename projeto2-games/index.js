@@ -54,6 +54,13 @@ games.forEach(function (item, indice) {
   console.log(item, indice);
 });
 
+console.log(games.length);
+
+//READ - GET
+//CREATE - POST
+//UPDATE - PUT
+//DELETE - DELETE
+
 app.get("/games/:id", (req, res) => {
   const id = req.params.id - 1;
   const game = games[id];
@@ -64,7 +71,40 @@ app.get("/games/:id", (req, res) => {
   }
 });
 
-console.log(games.length);
+app.post("/games", (req, res) => {
+  const game = req.body.filme;
+  const id = games.length + 1;
+
+  games.push(game);
+
+  res.send(`Game adicionado com sucesso!
+  Game: ${game}
+  ID do Game: ${id}`);
+});
+
+app.put("/games/:id", (req, res) => {
+  const gameAnterior = games[id];
+  const game = req.body.game;
+  const id = req.params.id - 1;
+
+  games[id] = game;
+
+  res.send(`Game alterado com sucesso!
+  Game Anterior: ${gameAnterior}
+  Game Atual: ${game}`);
+});
+
+app.delete("/games/:id", (req, res) => {
+  const id = req.params.id - 1;
+  const gameDeletado = games[id];
+
+  if (id > games.length || id < 0) {
+    res.send("ID não encontrado, tente novamente!");
+  }
+  delete games[id];
+  res.send(`Game deletado com sucesso!
+  Game: ${gameDeletado}`);
+});
 
 app.listen(port, () => {
   console.info(`App esta rodando em: http://localhost:${port}/`);
