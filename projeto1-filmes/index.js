@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+app.use(express.json()); //Informa para o req rodar usando Jso
+
 const port = 3000;
 
 const filmes = [
@@ -47,6 +49,10 @@ app.get("/filmes", (req, res) => {
   res.send(`<h1>${randomFilmes(randomMinMax(0, filmes.length + 1))}</h1>`);
 });
 
+app.get("/filmelist", (req, res) => {
+  res.send(filmes);
+});
+
 filmes.forEach(function (item, indice) {
   console.log(item, indice);
 });
@@ -54,7 +60,7 @@ filmes.forEach(function (item, indice) {
 app.get("/filmes/:id", (req, res) => {
   const id = req.params.id - 1;
   const filme = filmes[id];
-  if (id > filmes.length - 1 || id < 1) {
+  if (id > filmes.length - 1 || id < 0) {
     res.send("ID invalido\nTente novamente.");
   } else {
     res.send(filme);
@@ -62,6 +68,43 @@ app.get("/filmes/:id", (req, res) => {
 });
 
 console.log(filmes.length);
+
+//READ - GET
+//CREATE - POST
+//UPDATE - PUT
+//DELETE - DELETE
+
+//Rota de cadastra um novo filme
+app.post("/filmes", (req, res) => {
+  const filme = req.body.filme;
+  const id = filmes.length + 1;
+
+  filmes.push(filme);
+
+  res.send(`Filme adicionado com sucesso!
+  Filme: ${filme} 
+  ID do Filme: ${id}`);
+});
+
+//Rota de editar um filme
+app.put("/filmes/:id", (req, res) => {
+  const id = req.params.id - 1;
+  const filme = req.body.filme;
+  const filmeAntigo = filmes[id];
+  filmes[id] = filme;
+  res.send(`Filme Alterado com sucesso!
+  Filme Anterior: ${filmeAntigo}
+  Novo Filme: ${filme}`);
+});
+
+//Rota de deletar um filme
+app.delete("/filmes/:id", (req, res) => {
+  const id = req.params.id - 1;
+  const filmeDeletado = filmes[id];
+  delete filmes[id];
+  res.send(`Filme deletado com sucesso!
+  Filme: ${filmeDeletado}`);
+});
 
 app.listen(port, () => {
   console.info(`App esta rodando em: http://localhost:${port}/`);
