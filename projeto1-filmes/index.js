@@ -53,7 +53,7 @@ app.get("/filmelist", (req, res) => {
   res.send(filmes);
 });
 
-filmes.forEach(function (item, indice) {
+filmes.forEach((item, indice) => {
   console.log(item, indice);
 });
 
@@ -101,6 +101,9 @@ app.put("/filmes/:id", (req, res) => {
 app.delete("/filmes/:id", (req, res) => {
   const id = req.params.id - 1;
   const filmeDeletado = filmes[id];
+  if (id > filmes.length || id < 0) {
+    res.send("Filme não encontrado");
+  }
   delete filmes[id];
   res.send(`Filme deletado com sucesso!
   Filme: ${filmeDeletado}`);
