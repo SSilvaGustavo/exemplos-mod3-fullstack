@@ -1,4 +1,0 @@
-*.jpg
-*.json
-!package.json
-node_modules/
