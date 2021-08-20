@@ -10,11 +10,11 @@ const modeloCarro = ["Onix", "HR-V", "HB20", "Fusion"];
 
 const tipoCarro = ["Hatch", "SUV", "Hatch", "Sedan"];
 
-const combustivel = ["Flex", "Gasolina", "Alcool", "Diesel"];
+const combustivelCarro = ["Flex", "Gasolina", "Alcool", "Diesel"];
 
-const marca = ["Chevrolet", "Honda", "Hyundai", "Ford"];
+const marcaCarro = ["Chevrolet", "Honda", "Hyundai", "Ford"];
 
-const ano = ["2015", "2019", "2016", "2020"];
+const anoCarro = ["2015", "2019", "2016", "2020"];
 
 //LISTA E INDICES
 console.info("==== MODELO ====");
@@ -30,82 +30,142 @@ tipoCarro.forEach(function (item, indice) {
 console.log(`Total: ${tipoCarro.length}`);
 
 console.info("\n==== COMBUSTIVEL ====");
-combustivel.forEach(function (item, indice) {
+combustivelCarro.forEach(function (item, indice) {
   console.log(item, indice);
 });
-console.log(`Total: ${combustivel.length}`);
+console.log(`Total: ${combustivelCarro.length}`);
 
 console.info("\n==== MARCA ====");
-marca.forEach(function (item, indice) {
+marcaCarro.forEach(function (item, indice) {
   console.log(item, indice);
 });
-console.log(`Total: ${marca.length}`);
+console.log(`Total: ${marcaCarro.length}`);
 
 console.info("\n==== ANO ====");
-ano.forEach(function (item, indice) {
+anoCarro.forEach(function (item, indice) {
   console.log(item, indice);
 });
-console.log(`Total: ${ano.length}`);
+console.log(`Total: ${anoCarro.length}`);
 
-//READ - GET
 //CREATE - POST
+//READ - GET
 //UPDATE - PUT
 //DELETE - DELETE
 
-//CRUD modeloCarro
-app.get("/modelolist", (req, res) => {
-  res.send(modeloCarro);
+//CRUD
+app.get("/carrolist", (req, res) => {
+  res.send(`Modelo: ${modeloCarro}\n
+  Tipo: ${tipoCarro}\n
+  Combustivel: ${combustivelCarro}\n
+  Marca: ${marcaCarro}\n
+  Ano: ${anoCarro}`);
 });
 
-app.get("/modelo/:id", (req, res) => {
-  const id = req.params.id;
+app.get("/carro/:id", (req, res) => {
+  const id = req.params.id - 1;
   const modelo = modeloCarro[id];
+  const tipo = tipoCarro[id];
+  const combustivel = combustivelCarro[id];
+  const marca = marcaCarro[id];
+  const ano = anoCarro[id];
 
   if (id > modeloCarro.length || id < 0) {
     res.send("ID Invalido");
+  } else if (modeloCarro[id] == undefined) {
+    res.send("ID invalido");
+  } else {
+    res.send(`Modelo: ${modelo}\n
+  Tipo: ${tipo}\n
+  Combustivel: ${combustivel}\n
+  Marca: ${marca}\n
+  Ano: ${ano}`);
   }
-  res.send(modelo);
 });
 
-app.post("/modeloadd", (req, res) => {
+app.post("/carroadd", (req, res) => {
   const id = modeloCarro.length + 1;
   const modelo = req.body.modelo;
+  const tipo = req.body.tipo;
+  const combustivel = req.body.combustivel;
+  const marca = req.body.marca;
+  const ano = req.body.ano;
   modeloCarro.push(modelo);
+  tipoCarro.push(tipo);
+  combustivelCarro.push(combustivel);
+  marcaCarro.push(marca);
+  anoCarro.push(ano);
 
-  res.send(`Modelo criado com sucesso!
-    Modelo: ${modelo}
+  res.send(`Carro criado com sucesso!\n
+    Modelo: Modelo: ${modelo}\n
+    Tipo: ${tipo}\n
+    Combustivel: ${combustivel}\n
+    Marca: ${marca}\n
+    Ano: ${ano}\n
     ID: ${id}`);
 });
 
-app.put("/modeloup/:id", (req, res) => {
+app.put("/carroup/:id", (req, res) => {
   const modelo = req.body.modelo;
+  const tipo = req.body.tipo;
+  const combustivel = req.body.combustivel;
+  const marca = req.body.marca;
+  const ano = req.body.ano;
   const id = req.params.id - 1;
+
   if (id > modeloCarro.length || id < 0) {
     res.send("ID Invalido");
   } else if (modeloCarro[id] == undefined) {
     res.send("ID Invalido");
   } else {
     const modeloAnterior = modeloCarro[id];
+    const tipoAnterior = tipoCarro[id];
+    const combustivelAnterior = combustivelCarro[id];
+    const marcaAnterior = marcaCarro[id];
+    const anoAnterior = anoCarro[id];
     modeloCarro[id] = modelo;
+    tipoCarro[id] = tipo;
+    combustivelCarro[id] = combustivel;
+    marcaCarro[id] = marca;
+    anoCarro[id] = ano;
 
-    res.send(`Modelo alterado com sucesso!
+    res.send(`Carro alterado com sucesso!\n
   Modelo Anterior: ${modeloAnterior}
-  Modelo Atual: ${modelo}`);
+  Modelo Atual: ${modelo}\n
+  Tipo Anterior: ${tipoAnterior}
+  Tipo Atual: ${tipo}\n
+  Combustivel Anterior: ${combustivelAnterior}
+  Combustivel Atual: ${combustivel}\n
+  Marca Anterior: ${marcaAnterior}
+  Marca Atual: ${marca}\n
+  Ano Anterior: ${anoAnterior}
+  Ano Atual: ${ano}`);
   }
 });
 
-app.delete("/modelodel/:id", (req, res) => {
+app.delete("/carrodel/:id", (req, res) => {
   const id = req.params.id - 1;
   const modeloDeletado = modeloCarro[id];
+  const tipoDeletado = tipoCarro[id];
+  const combustivelDeletado = combustivelCarro[id];
+  const marcaDeletado = marcaCarro[id];
+  const anoDeletado = anoCarro[id];
   if (id > modeloCarro.length || id < 0) {
     res.send("ID Invalido");
   } else if (modeloCarro[id] == undefined) {
     res.send("ID Invalido");
   } else {
     modelo = modeloCarro.splice(id, 1);
+    tipo = tipoCarro.splice(id, 1);
+    combustivel = combustivelCarro.splice(id, 1);
+    marca = marcaCarro.splice(id, 1);
+    ano = anoCarro.splice(id, 1);
 
-    res.send(`Modelo deletado com sucesso!
-  Modelo: ${modeloDeletado}`);
+    res.send(`Carro deletado com sucesso!\n
+  Modelo: ${modeloDeletado}\n
+  Tipo: ${tipoDeletado}\n
+  Combustivel: ${combustivelDeletado}\n
+  Marca: ${marcaDeletado}\n
+  Ano: ${anoDeletado}`);
   }
 });
 
