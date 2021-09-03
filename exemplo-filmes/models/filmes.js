@@ -6,7 +6,7 @@ const filmesModel = new mongoose.Schema({
   genero: { type: String, require: true },
   sinopse: { type: String },
   duracao: { type: Number },
-  anoLançamento: { type: Number, require: true },
+  anoLancamento: { type: Number, require: true },
   dataCriacao: { type: Date, default: Date.now },
 });
 
